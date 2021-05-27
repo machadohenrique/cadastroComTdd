@@ -7,7 +7,7 @@ let bcrypt = require("bcrypt");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-mongoose.connect("mongodb://localhost:27017/games", { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect("mongodb://localhost:27017/cadastro", { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         //console.log("Conectado com banco");
     }).catch((err) => {
@@ -49,5 +49,12 @@ app.post("/user", async (req, res) => {
         res.sendStatus(500);
     }
 });
+
+
+app.delete("/user/:email", async (req, res) => {
+    await User.deleteOne({ "email": req.params.email });
+    res.sendStatus(200);
+})
+
 
 module.exports = app;
