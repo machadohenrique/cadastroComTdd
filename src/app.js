@@ -2,12 +2,13 @@ let express = require("express");
 let app = express();
 let mongoose = require("mongoose");
 let user = require("./models/User");
+let product = require("./models/Product");
 let bcrypt = require("bcrypt");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-mongoose.connect("mongodb://localhost:27017/cadastro", { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect("mongodb://localhost:27017/lojaProdutos", { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         //console.log("Conectado com banco");
     }).catch((err) => {
@@ -16,6 +17,8 @@ mongoose.connect("mongodb://localhost:27017/cadastro", { useNewUrlParser: true, 
 
 
 let User = mongoose.model("User", user);
+let Product = mongoose.model("Product", product);
+
 
 app.get("/", (req, res) => {
     res.json({});
@@ -49,6 +52,17 @@ app.post("/user", async (req, res) => {
         res.sendStatus(500);
     }
 });
+
+app.post("/product", async (req, res) => {
+    let newProduct = new Product({ nameProduct: req.body.nameProduct, price: req.body.price, description: req.body.description })
+    await newProduct.save();
+    res.json({ nameProduct: "Pendrive" });
+})
+
+
+
+
+
 
 
 app.delete("/user/:email", async (req, res) => {
