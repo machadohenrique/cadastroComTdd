@@ -54,16 +54,17 @@ app.post("/user", async (req, res) => {
 });
 
 app.post("/product", async (req, res) => {
+    //Criar um try - catch
     let newProduct = new Product({ nameProduct: req.body.nameProduct, price: req.body.price, description: req.body.description })
     await newProduct.save();
     res.json({ nameProduct: "Pendrive" });
 })
 
 
-
-
-
-
+app.delete("/product/:nameProduct", async (req, res) => {
+    await Product.deleteOne({ "nameProduct": req.params.nameProduct });
+    res.sendStatus(200);
+})
 
 app.delete("/user/:email", async (req, res) => {
     await User.deleteOne({ "email": req.params.email });
