@@ -60,11 +60,6 @@ app.post("/product", async (req, res) => {
 })
 
 
-
-
-
-
-
 app.delete("/user/:email", async (req, res) => {
     await User.deleteOne({ "email": req.params.email });
     res.sendStatus(200);
