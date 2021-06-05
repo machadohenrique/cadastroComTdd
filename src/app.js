@@ -54,10 +54,19 @@ app.post("/user", async (req, res) => {
 });
 
 app.post("/product", async (req, res) => {
-    //Criar um try - catch
-    let newProduct = new Product({ nameProduct: req.body.nameProduct, price: req.body.price, description: req.body.description })
-    await newProduct.save();
-    res.json({ nameProduct: "Pendrive" });
+    try {
+        if (req.body.nameProduct == "" || req.body.price == "" || req.body.description == "") {
+            res.sendStatus(400);
+            return;
+        }
+
+        let newProduct = new Product({ nameProduct: req.body.nameProduct, price: req.body.price, description: req.body.description })
+        await newProduct.save();
+        res.json({ nameProduct: "Pendrive" });
+
+    } catch (err) {
+        res.sendStatus(500);
+    }
 })
 
 
