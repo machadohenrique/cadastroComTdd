@@ -54,15 +54,28 @@ app.post("/user", async (req, res) => {
 });
 
 app.post("/product", async (req, res) => {
+
+    if (req.body.nameProduct == "" || req.body.price == "" || req.body.description == "" || req.body.productCode == "") {
+        res.sendStatus(400);
+        return;
+    }
+
     try {
-        if (req.body.nameProduct == "" || req.body.price == "" || req.body.description == "") {
-            res.sendStatus(400);
+
+        let code = await Product.findOne({ "productCode": req.body.productCode })
+
+        if (code != undefined) {
+            res.statusCode = 400;
+            res.json({ error: "Produto ja cadastrado" })
             return;
         }
 
-        let newProduct = new Product({ nameProduct: req.body.nameProduct, price: req.body.price, description: req.body.description })
+        let newProduct = new Product({
+            nameProduct: req.body.nameProduct, price: req.body.price, description: req.body.description,
+            productCode: req.body.productCode
+        })
         await newProduct.save();
-        res.json({ nameProduct: "Pendrive" });
+        res.json({ productCode: req.body.productCode });
 
     } catch (err) {
         res.sendStatus(500);
